@@ -16,8 +16,8 @@ function addClient(req,res){
     }).then( (result) => res.json(result))
 };
 
-function updateClient(req,res){
-    ClientRepository.update({
+async function updateClient(req,res){
+    await ClientRepository.update({
         nome: req.body.nome,
         email: req.body.email
     },
@@ -25,15 +25,20 @@ function updateClient(req,res){
         where: {
           id: req.params.id
     }
-    }).then( (result) => res.send(result))
+    });
+
+    ClientRepository.findByPk(req.params.id)
+    .then( (result) => res.json(result))
 };
 
-function deleteClient(req,res){
-    ClientRepository.destroy({
+async function deleteClient(req,res){
+    await ClientRepository.destroy({
         where: {
           id: req.params.id
         }
-      }).then( (result) => res.json(result))
+      });
+
+    ClientRepository.findAll().then((result) => res.json(result));
 };
 
 export default { findAll, addClient, findClient, updateClient, deleteClient } 
